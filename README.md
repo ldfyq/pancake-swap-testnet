@@ -1,3 +1,7 @@
+提前安装的软件
+
+1.Python
+2.Visual Studio (只安装c++部分)
 
 ## Preparing source
 
@@ -28,6 +32,11 @@ git checkout -b v1 0257017f2daaae2f67c24ded70b5829f74a01b3c
 yarn install
 ```
 
+## 编译遇到的问题：
+1 OpenSSL SSL_read: Connection was reset, errno 10054
+找到yarn.lock文件找到对应的依赖设置指定版本
+
+2 遇到一直下载不了的git，通过https://www.ipaddress.com/ 获取域名解析的ip，然后配置host
 
 ## Setup
 
@@ -48,7 +57,7 @@ sol-merger pancake-swap-periphery/contracts/PancakeRouter.sol ./build
 
 - Access: https://remix.ethereum.org/#optimize=false&runs=200&evmVersion=null&version=soljson-v0.5.16+commit.9c3226ce.js
 
-#### Deploy WBNB
+#### Deploy WBNB (也可以直接用地址0xae13d989dac2f0debff460ac112a837c89baa7cd)
 
 + New File: `WBNB.sol` => Copy source from https://gist.github.com/nhancv/b0b35f16472e4998d0fd17b7a1e4f707
 + Compiler tab => Select compiler: `v0.8.3+commit.8d00100c`
@@ -58,20 +67,20 @@ sol-merger pancake-swap-periphery/contracts/PancakeRouter.sol ./build
 
 + New File: `PancakeFactory.sol` => Copy source from `./build/PancakeFactory.sol`
 + Compiler tab => Select compiler: `v0.5.16+commit.9c3226ce`
-+ Deploy tab => Select `PancakeFactory` -> Fill your address as `feeToSetter` in constructor -> Deploy
++ Deploy tab => Select `PancakeFactory` -> Fill your address as `feeToSetter` in constructor(填写合约的管理者) -> Deploy
 
 #### Deploy PancakeRouter01
 
 + New File: `PancakeRouter01.sol` => Copy source from `./build/PancakeRouter01.sol`
 + Expand `PancakeFactory` deployed above -> Read `INIT_CODE_PAIR_HASH` -> Copy this hash without prefix `0x`. Ex: `bb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539`
-+ Edit `PancakeRouter01`: Find `PancakeLibrary` -> `pairFor` function => Replace new hex by `INIT_CODE_PAIR_HASH` above. Ex: `hex'd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66'` -> `hex'bb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539'`
++ Edit `PancakeRouter01`: Find `PancakeLibrary` -> `pairFor` function => Replace new hex by `INIT_CODE_PAIR_HASH` above. Ex: `hex'd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66'` -> `hex'bb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539'`(这个值可以在PancakeFactory发布的合约拿到 合约->阅读合约)
 + Compiler tab => Select compiler: `v0.6.6+commit.6c089d02`
 + Deploy tab => Select `PancakeRouter01` -> Fill `PancakeFactory` address and `WBNB` address as constructor params -> Deploy
 
 #### Deploy PancakeRouter (Main Router)
 
 + New File: `PancakeRouter.sol` => Copy source from `./build/PancakeRouter.sol`
-+ Expand `PancakeFactory` deployed above -> Read `INIT_CODE_PAIR_HASH` -> Copy this hash without prefix `0x`. Ex: `bb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539`
++ Expand `PancakeFactory` deployed above -> Read `INIT_CODE_PAIR_HASH` -> Copy this hash without prefix `0x`. Ex: `bb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539`(这个值可以在PancakeFactory发布的合约拿到 合约->阅读合约)
 + Edit `PancakeRouter`: Find `PancakeLibrary` -> `pairFor` function => Replace new hex by `INIT_CODE_PAIR_HASH` above. Ex: `hex'd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66'` -> `hex'bb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539'`
 + Compiler tab => Select compiler: `v0.6.6+commit.6c089d02`; Check on `Enable optimization: 200` to avoid `Contract code size limit` issue
 + Deploy tab => Select `PancakeRouter` -> Fill `PancakeFactory` address and `WBNB` address as constructor params -> Deploy
@@ -125,22 +134,3 @@ yarn start
 ```
 yarn build
 ```
-
-### Deployment
-
-- WBNB:            0x0dE8FCAE8421fc79B29adE9ffF97854a424Cad09
-- PancakeFactory:  0x5Fe5cC0122403f06abE2A75DBba1860Edb762985
-- INIT_CODE_HASH:  0xbb600ba95884f2c2837114fd2f157d00137e0b65b0fe5226523d720e4a4ce539
-- PancakeRouter01: 0x3E2b14680108E8C5C45C3ab5Bc04E01397af14cB
-- PancakeRouter:   0xCc7aDc94F3D80127849D2b41b6439b7CF1eB4Ae0
-- Frontend:        https://pcs.nhancv.com 
-
-**Tokens**
-
-- BAKE Token: 0xb289b361a633A9D2b0B39BAE76BB458d83f58CEC
-- BUSD Token: 0xE0dFffc2E01A7f051069649aD4eb3F518430B6a4
-- ETH Token:  0xE282a15DBad45e3131620C1b8AF85B7330Cb3b4B
-- USDT Token: 0x7afd064DaE94d73ee37d19ff2D264f5A2903bBB0
-- XRP Token:  0x3833B175Af1900b457cf83B839727AF6C9cF0bEe
-- DAI Token:  0x3Cf204795c4995cCf9C1a0B3191F00c01B03C56C
-- CAKE Token: 0xB8F5B50ed77596b5E638359d828000747bb3dd89
